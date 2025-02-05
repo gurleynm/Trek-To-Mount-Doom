@@ -1,0 +1,23 @@
+﻿<div class="flex-r" style="width:100%;padding:0 .25em;margin:0;justify-content:space-between">
+    <div>The Shire</div>
+    <div>Mount Doom</div>
+</div>
+<div style="display:flex;justify-content:center">
+    <span class="oi oi-map-marker" style="color:forestgreen" />
+    <div class="flex-c">
+        <div style="width:100%;display:flex;justify-content:start;padding-left:@(CleanerPercentage + "%")">
+            <span class="oi oi-map-marker" style="color:aqua;" />
+        </div>
+        <hr style="border: none; border-top: 5px dotted #f00; color: #fff; background-color: transparent; height: 5px; width: 20em;" />
+    </div>
+    <span>🌋</span>
+</div>
+<div>@(Constants.Format(CleanerPercentage) + "% Complete")</div>
+
+@code {
+    [Parameter]
+    public double MilesTraveled {get;set;}
+    [Parameter]
+    public double DistanceToMordor { get; set; } = 1;
+    double CleanerPercentage => MilesTraveled / DistanceToMordor * 100.00;
+}

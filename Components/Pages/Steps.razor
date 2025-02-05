@@ -1,0 +1,37 @@
+﻿@page "/steps"
+
+<div class="flex-r" style="width:100%;">
+    <div class="flex-c" style="width:80%">
+        <h2 style="text-align:center">How many steps did you take today:</h2>
+        <input type="number" @bind-value=steps />
+        <button class="btn btn-primary" style="margin:1em 0" @onclick=InputSteps>Save</button>
+        @if (miles > 0)
+        {
+            <h3>@($"Equivalent to {miles} miles!")</h3>
+        }
+    </div>
+</div>
+
+
+@code {
+    private double steps = 0;
+    private double miles = 0;
+    private int Height = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Constants.UpdatePage("steps");
+        int.TryParse(await Constants.PullSecure("Height"), out Height);
+    }
+
+    private async Task InputSteps()
+    {
+        if (Constants.StartDate == Constants.InitDate)
+        {
+            Constants.PushSecure("Start", DateTime.Now.ToString("MMM dd, yyyy"));
+        }
+
+        miles = double.Round(MileManager.MilesPerStep * (steps * 1.00), 2);
+        await Constants.UpdateStepsSecure((int)steps);
+    }
+}

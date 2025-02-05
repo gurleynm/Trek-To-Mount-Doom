@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:T2MD"
+             xmlns:pages="clr-namespace:T2MD.Components.Pages"
+             x:Class="T2MD.App">
+    <Application.MainPage>
+        <Shell>
+            <ShellContent>
+                <ShellContent.ContentTemplate>
+                    <DataTemplate>
+                        <ContentPage>
+                            <BlazorWebView x:Name="blazorWebView1" HostPage="wwwroot/index.html">
+                                <BlazorWebView.RootComponents>
+                                    <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
+                                </BlazorWebView.RootComponents>
+                            </BlazorWebView>
+                        </ContentPage>
+                    </DataTemplate>
+                </ShellContent.ContentTemplate>
+            </ShellContent>
+        </Shell>
+    </Application.MainPage>
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!--
+            For information about styling .NET MAUI pages
+            please refer to the documentation:
+            https://go.microsoft.com/fwlink/?linkid=2282329
+        -->
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

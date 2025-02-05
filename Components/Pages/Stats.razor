@@ -1,0 +1,82 @@
+﻿@page "/stats"
+
+<div class="flex-c">
+    <h2>Quest Stats</h2>
+    <hr/>
+    <div style="color:goldenrod;font-size:5em;margin:0">@Constants.Format(MileManager.MajorMilestones["Mount Doom"] - MilesTraveled)</div>
+    <div style="color:goldenrod;font-size:1em;margin-bottom:1em">miles to Mount Doom</div>
+    <hr />
+
+    <Map MilesTraveled=@MilesTraveled DistanceToMordor=@DistanceToMordor />
+
+
+    <table class="stat-table">
+        @if (Constants.StartDate != Constants.InitDate)
+        {
+            <tr>
+                <td>
+                    QUEST STARTED
+                </td>
+                <td>
+                    <h5 style="color:goldenrod">@Constants.StartDate</h5>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                TOTAL STEPS
+            </td>
+            <td>
+                <h5 style="color:goldenrod">@TotalSteps</h5>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                LAST STOP
+            </td>
+            <td>
+                <h5 style="color:goldenrod">@Major</h5>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                MILESTONE
+            </td>
+            <td>
+                <h5 style="color:goldenrod">@Minor</h5>
+            </td>
+        </tr>
+    </table>
+</div>
+
+@code {
+    int UserHeight = 36;
+    double MilesTraveled;
+    double DistanceToMordor => MileManager.DistanceToMtDoom;
+    double CleanerPercentage => MilesTraveled / DistanceToMordor * 100.00;
+    string Major = "";
+    string Minor = "";
+    int NumDays => DateTime.Now.Subtract(DateTime.Parse(Constants.StartDate)).Days + 1;
+    int TotalSteps;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Constants.UpdatePage("stats");
+        TotalSteps = await MileManager.GetTotalSteps();
+
+        var height = MileManager.HeightInInches > 35 ? MileManager.HeightInInches.ToString() : await Constants.PullSecure("Height");
+        if (int.TryParse(height, out UserHeight))
+        {
+            MileManager.HeightInInches = UserHeight;
+            MilesTraveled = await MileManager.StepsToMiles();
+
+            var milestones = MileManager.GetMilestones(MilesTraveled);
+            Major = milestones.Item1;
+            Minor = milestones.Item2;
+        }
+        else
+            UserHeight = 35;
+
+        StateHasChanged();
+    }
+}

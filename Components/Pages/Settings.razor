@@ -1,0 +1,11 @@
+﻿@page "/settings"
+
+<T2MD.Components.Shared.HeightSetting />
+
+@code {
+    protected override void OnInitialized()
+    {
+        Constants.UpdatePage("settings");
+        base.OnInitialized();
+    }
+}

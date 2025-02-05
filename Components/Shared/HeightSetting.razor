@@ -1,0 +1,68 @@
+﻿<div class="flex-c">
+    <h1>Enter Your Height</h1>
+    <div class="flex-r-space" style="width:80%">
+        <div class="flex-c">
+            <h2>Feet:</h2>
+            <select title="Feet" style="width:100%" @bind=@feet>
+                @for (int cnt = 3; cnt < 8; cnt++)
+                {
+                    int localC = cnt;
+                    <option>@localC</option>
+                }
+            </select>
+        </div>
+
+        <div class="flex-c">
+            <h2>Inches:</h2>
+            <select title="Inches" style="width:100%" @bind=@inches>
+                @for (int cnt = 1; cnt < 12; cnt++)
+                {
+                    int localC = cnt;
+                    <option>@localC</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div style="margin:1em">
+        @if (Updated)
+        {
+            <h2>Height updated!</h2>
+        }
+        else
+        {
+            <button class="btn btn-primary" @onclick=@(async () => await SaveHeight())>Save</button>
+        }
+    </div>
+</div>
+
+@code {
+    int feet = 3;
+    int inches = 6;
+    bool Updated;
+
+    [Parameter]
+    public EventCallback Validate { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string height = await Constants.PullSecure("Height");
+        if (int.TryParse(height, out int Height))
+        {
+            feet = Height / 12;
+            inches = Height - (feet * 12);
+        }
+    }
+
+    private async Task SaveHeight()
+    {
+        MileManager.HeightInInches = feet * 12 + inches;
+        await Constants.PushSecure("Height", MileManager.HeightInInches);
+        if (Validate.HasDelegate)
+            await Validate.InvokeAsync();
+        Updated = true;
+        StateHasChanged();
+        await Task.Delay(2000);
+        Updated = false;
+    }
+}

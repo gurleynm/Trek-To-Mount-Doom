@@ -1,0 +1,72 @@
+﻿@page "/"
+
+@if (UserHeight < 36)
+{
+        <T2MD.Components.Shared.HeightSetting Validate=@(async () => await Refresh()) />
+}
+else
+{
+    <div class="flex-c" style="justify-content:center;height:90vh;">
+        <div class="flex-r" style="width:100%;">
+        @if (NumDays > 700000)
+        {
+                    <h2>Day 0</h2>
+        }
+        else
+        {
+                    <h2>Day @NumDays</h2>
+        }
+        </div>
+        <div style="color:goldenrod;font-size:5em;margin:0">@Constants.Format(MilesTraveled)</div>
+        <div style="color:goldenrod;font-size:1em;margin-bottom:1em">MILES</div>
+
+        <hr />
+        <div style="font-size:1em">@Major</div>
+        <div style="font-size:1.5em;"><i>@Minor</i></div>
+        <hr />
+        <Map MilesTraveled=@MilesTraveled DistanceToMordor=@DistanceToMordor />
+    </div>
+}
+
+@code {
+    int UserHeight = 36;
+    double MilesTraveled;
+    double DistanceToMordor => MileManager.DistanceToMtDoom;
+    double CleanerPercentage => MilesTraveled / DistanceToMordor * 100.00;
+    string Major = "";
+    string Minor = "";
+    int NumDays => DateTime.Now.Subtract(DateTime.Parse(Constants.StartDate)).Days + 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Constants.UpdatePage("");
+
+        if (Constants.StartDate == Constants.InitDate)
+        {
+            var start = await Constants.PullSecure("Start");
+
+            if (!string.IsNullOrEmpty(start))
+                Constants.StartDate = start;
+        }
+
+        await Refresh();
+    }
+
+    private async Task Refresh()
+    {
+        var height = MileManager.HeightInInches > 35 ? MileManager.HeightInInches.ToString() : await Constants.PullSecure("Height");
+        if (int.TryParse(height, out UserHeight))
+        {
+            MileManager.HeightInInches = UserHeight;
+            MilesTraveled = await MileManager.StepsToMiles();
+
+            var milestones = MileManager.GetMilestones(MilesTraveled);
+            Major = milestones.Item1;
+            Minor = milestones.Item2;
+        }
+        else
+            UserHeight = 35;
+
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,22 @@
+﻿@inject NavigationManager NavMan
+
+<nav class="navbar" style="position:fixed;bottom:0;left:0;z-index:1;width:100%;background-color:#24262a">
+    <div class="flex-r-space" style="width:100%">
+        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <span class="oi oi-home" aria-hidden="true" style="color:@Constants.PageColors[""]"></span>
+        </NavLink>
+        <NavLink class="nav-link" href="stats" Match="NavLinkMatch.All">
+            <span class="oi oi-spreadsheet" aria-hidden="true" style="color:@Constants.PageColors["stats"]"></span>
+        </NavLink>
+        <NavLink class="nav-link" href="steps" Match="NavLinkMatch.All">
+            <span class="oi oi-plus" aria-hidden="true" style="color:@Constants.PageColors["steps"]"></span>
+        </NavLink>
+        <NavLink class="nav-link" href="settings" Match="NavLinkMatch.All">
+            <span class="oi oi-cog" aria-hidden="true" style="color:@Constants.PageColors["settings"]"></span>
+        </NavLink>
+    </div>
+</nav>
+
+@code {
+
+}
