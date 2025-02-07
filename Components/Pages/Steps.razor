@@ -21,17 +21,12 @@
     protected override async Task OnInitializedAsync()
     {
         Constants.UpdatePage("steps");
-        int.TryParse(await Constants.PullSecure("Height"), out Height);
+        Height = await Constants.PullSecureInt("Height");
     }
 
     private async Task InputSteps()
     {
-        if (Constants.StartDate == Constants.InitDate)
-        {
-            Constants.PushSecure("Start", DateTime.Now.ToString("MMM dd, yyyy"));
-        }
-
         miles = double.Round(MileManager.MilesPerStep * (steps * 1.00), 2);
-        await Constants.UpdateStepsSecure((int)steps);
+        await MileManager.UpdateStepsSecure((int)steps);
     }
 }

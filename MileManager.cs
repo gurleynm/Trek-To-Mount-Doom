@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using T2MD.Shared;
 
 namespace T2MD
 {
     public class MileManager
     {
+        private static readonly string and_base = "ANDROID_BASELINE";
         private static int TotalSteps { get; set; }
         public static double HeightInInches { get; set; } = 35;
-        public static double MilesPerStep => (HeightInInches*0.413)/(5280*12);
+        public static double MilesPerStep => (HeightInInches * 0.413) / (5280 * 12);
         public static double DistanceToMtDoom => MajorMilestones["Mount Doom"];
         public static Dictionary<string, string> MajorImages => new Dictionary<string, string> {
             { "Hobbitton", "https://endlessfamilytravels.com/wp-content/uploads/2023/05/Hobbiton-Houses5.jpeg" }
@@ -64,9 +66,9 @@ namespace T2MD
         };
         public static async Task<int> GetTotalSteps()
         {
-            if (TotalSteps == 0){
-                if(int.TryParse(await Constants.PullSecure("TotalSteps"), out int ts))
-                    TotalSteps = ts;
+            if (TotalSteps == 0)
+            {
+                TotalSteps = await Constants.PullSecureInt("TotalSteps");
             }
 
             return TotalSteps;
@@ -78,21 +80,10 @@ namespace T2MD
 
         public static async Task<double> StepsToMiles()
         {
-            string totalSteps;
-            if(TotalSteps == 0)
-            {
-                totalSteps = await Constants.PullSecure("TotalSteps");
-                if(int.TryParse(totalSteps, out int ts))
-                    TotalSteps = ts;
-            }
-            else
-                totalSteps = TotalSteps.ToString();
+            if (TotalSteps == 0)
+                TotalSteps = await Constants.PullSecureInt("TotalSteps");
 
-            if (double.TryParse(totalSteps, out double steps)){
-                return StepsToMiles(steps);
-            }
-
-            return 0;
+            return StepsToMiles(TotalSteps);
         }
         public static double StepsToMiles(double steps)
         {
@@ -121,6 +112,52 @@ namespace T2MD
             }
 
             return (major, minor);
+        }
+
+        public static async Task<int> RetrieveSteps()
+        {
+            if (TotalSteps == 0)
+                TotalSteps = await Constants.PullSecureInt("TotalSteps");
+
+            int InitSteps = TotalSteps;
+
+            if (!Pedometer.Default.IsSupported)
+                return TotalSteps;
+
+            int Current = await Pedometer.Default.GetCurrentReading();
+#if ANDROID
+            bool containsKey = await Constants.SecureContainsKey(and_base);
+            if (containsKey)
+            {
+                int baseline = await Constants.PullSecureInt(and_base);
+                Constants.PushSecure(and_base, Current);
+
+                if (Current >= baseline)
+                    Current -= baseline;
+
+                TotalSteps += Current;
+            }
+            else
+                Constants.PushSecure(and_base, Current);
+#endif
+#if IOS
+            TotalSteps = Current;
+#endif
+            if (InitSteps != TotalSteps)
+                await Constants.PushSecure("TotalSteps", TotalSteps);
+
+            return TotalSteps;
+        }
+
+        public static async Task<int> UpdateStepsSecure(int steps)
+        {
+            if (TotalSteps == 0)
+                TotalSteps = await Constants.PullSecureInt("TotalSteps");
+
+            TotalSteps += steps;
+            await Constants.PushSecure("TotalSteps", TotalSteps);
+
+            return TotalSteps;
         }
     }
 }

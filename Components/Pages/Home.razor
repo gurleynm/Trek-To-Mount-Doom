@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using T2MD.Data
+@using T2MD.Shared
 
 @if (UserHeight < 36)
 {
@@ -49,20 +51,24 @@ else
     protected override async Task OnInitializedAsync()
     {
         Constants.UpdatePage("");
-
-        if (string.IsNullOrEmpty(Constants.Avatar))
+        if (Constants.FirstLoad)
         {
-            string tempAva = await Constants.PullSecure("Avatar");
-            if (!string.IsNullOrEmpty(tempAva))
-                Constants.Avatar = tempAva;
-        }
+            Constants.FirstLoad = false;
 
-        if (Constants.StartDate == Constants.InitDate)
-        {
-            var start = await Constants.PullSecure("Start");
+            if (Constants.StartDate == Constants.InitDate)
+            {
+                Constants.StartDate = DateTime.Now.ToString("MMM dd, yyyy");
+                await Constants.PushSecure("Start", Constants.StartDate);
+            }
 
-            if (!string.IsNullOrEmpty(start))
-                Constants.StartDate = start;
+            await MileManager.RetrieveSteps();
+
+            if (string.IsNullOrEmpty(Constants.Avatar))
+            {
+                string tempAva = await Constants.PullSecure("Avatar");
+                if (!string.IsNullOrEmpty(tempAva))
+                    Constants.Avatar = tempAva;
+            }
         }
 
         await Refresh();
@@ -70,8 +76,8 @@ else
 
     private async Task Refresh()
     {
-        var height = MileManager.HeightInInches > 35 ? MileManager.HeightInInches.ToString() : await Constants.PullSecure("Height");
-        if (int.TryParse(height, out UserHeight))
+        UserHeight = MileManager.HeightInInches > 35 ? (int)MileManager.HeightInInches : await Constants.PullSecureInt("Height");
+        if (UserHeight > 0)
         {
             MileManager.HeightInInches = UserHeight;
             MilesTraveled = await MileManager.StepsToMiles();
@@ -84,5 +90,10 @@ else
             UserHeight = 35;
 
         StateHasChanged();
+    }
+
+    private void StartCounting(EventHandler<PedometerData> pedoData)
+    {
+        
     }
 }

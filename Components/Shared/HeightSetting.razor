@@ -48,8 +48,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        string height = await Constants.PullSecure("Height");
-        if (int.TryParse(height, out int Height))
+        int Height = await Constants.PullSecureInt("Height");
+        if (Height > 0)
         {
             feet = Height / 12;
             inches = Height - (feet * 12);

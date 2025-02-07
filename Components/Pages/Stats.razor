@@ -64,8 +64,8 @@
         Constants.UpdatePage("stats");
         TotalSteps = await MileManager.GetTotalSteps();
 
-        var height = MileManager.HeightInInches > 35 ? MileManager.HeightInInches.ToString() : await Constants.PullSecure("Height");
-        if (int.TryParse(height, out UserHeight))
+        UserHeight = MileManager.HeightInInches > 35 ? (int)MileManager.HeightInInches : await Constants.PullSecureInt("Height");
+        if (UserHeight > 0)
         {
             MileManager.HeightInInches = UserHeight;
             MilesTraveled = await MileManager.StepsToMiles();

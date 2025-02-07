@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Plugin.Maui.Pedometer;
+using T2MD.Shared;
 
 namespace T2MD
 {
