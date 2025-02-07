@@ -1,11 +1,37 @@
 ﻿@page "/settings"
 
-<T2MD.Components.Shared.HeightSetting />
+<div class="flex-c" style="width:100%;margin:1em 0">
+
+    <h1>Select Your Avatar</h1>
+    <select @bind=@Constants.Avatar>
+        <option disabled value="">(Select)</option>
+        <option value="aragorn.png">Aragorn</option>
+        <option value="bill.png">Bill</option>
+        <option value="samwise.png">Samwise</option>
+        <option value="boromir.png">Boromir</option>
+        <option value="pippin.png">Pippin</option>
+        <option value="merry.png">Merry</option>
+        <option value="gimli.png">Gimli</option>
+        <option value="legolas.png">Legolas</option>
+        <option value="frodo.png">Frodo</option>
+        <option value="gandalf.png">Gandalf</option>
+    </select>
+    <img src="/images/fellowship.png" style="width:100%" />
+</div>
+<T2MD.Components.Shared.HeightSetting Validate="UpdateSettings" SuccessText="Updated!" />
+
+
 
 @code {
     protected override void OnInitialized()
     {
         Constants.UpdatePage("settings");
         base.OnInitialized();
+    }
+
+    private async Task UpdateSettings()
+    {
+        if (!string.IsNullOrEmpty(Constants.Avatar))
+            Constants.PushSecure("Avatar", Constants.Avatar);
     }
 }

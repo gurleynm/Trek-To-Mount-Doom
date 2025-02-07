@@ -88,7 +88,6 @@
 
         <!-- Images -->
         <MauiImage Include="Resources\Images\*" />
-        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
         <!-- Custom Fonts -->
         <MauiFont Include="Resources\Fonts\*" />
@@ -102,6 +101,25 @@
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiImage Include="wwwroot\images\aragorn.png" />
+      <MauiImage Include="wwwroot\images\boromir.png" />
+      <MauiImage Include="wwwroot\images\fellowship.png" />
+      <MauiImage Include="wwwroot\images\frodo.png" />
+      <MauiImage Include="wwwroot\images\gandalf.png" />
+      <MauiImage Include="wwwroot\images\gimli.png" />
+      <MauiImage Include="wwwroot\images\legolas.png" />
+      <MauiImage Include="wwwroot\images\merry.png" />
+      <MauiImage Include="wwwroot\images\pippin.png" />
+      <MauiImage Include="wwwroot\images\samwise.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiImage Update="Resources\Images\dotnet_bot.svg">
+        <BaseSize>168,208</BaseSize>
+      </MauiImage>
     </ItemGroup>
 
 </Project>

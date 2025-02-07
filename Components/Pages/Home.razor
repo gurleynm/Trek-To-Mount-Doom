@@ -2,20 +2,28 @@
 
 @if (UserHeight < 36)
 {
-        <T2MD.Components.Shared.HeightSetting Validate=@(async () => await Refresh()) />
+    <T2MD.Components.Shared.HeightSetting Validate=@(async () => await Refresh()) />
 }
 else
 {
-    <div class="flex-c" style="justify-content:center;height:90vh;">
+    <div class="flex-c" style="justify-content:start;height:90vh;">
+        @if (MileManager.MajorImages.ContainsKey(Major))
+        {
+            <div class="flex-c" style="justify-content:end;width:100%;background-image:url('@MileManager.MajorImages[Major]');
+                    background-size:cover;margin-bottom:1em;height:40vh">
+                <img src="@("/images/" + AvaPic)" style="height:80%" />
+            </div>
+        }
+
         <div class="flex-r" style="width:100%;">
-        @if (NumDays > 700000)
-        {
-                    <h2>Day 0</h2>
-        }
-        else
-        {
-                    <h2>Day @NumDays</h2>
-        }
+            @if (NumDays > 700000)
+            {
+                <h2>Day 0</h2>
+            }
+            else
+            {
+                <h2>Day @NumDays</h2>
+            }
         </div>
         <div style="color:goldenrod;font-size:5em;margin:0">@Constants.Format(MilesTraveled)</div>
         <div style="color:goldenrod;font-size:1em;margin-bottom:1em">MILES</div>
@@ -36,10 +44,18 @@ else
     string Major = "";
     string Minor = "";
     int NumDays => DateTime.Now.Subtract(DateTime.Parse(Constants.StartDate)).Days + 1;
+    string AvaPic => string.IsNullOrEmpty(Constants.Avatar) ? "aragorn.png" : Constants.Avatar;
 
     protected override async Task OnInitializedAsync()
     {
         Constants.UpdatePage("");
+
+        if (string.IsNullOrEmpty(Constants.Avatar))
+        {
+            string tempAva = await Constants.PullSecure("Avatar");
+            if (!string.IsNullOrEmpty(tempAva))
+                Constants.Avatar = tempAva;
+        }
 
         if (Constants.StartDate == Constants.InitDate)
         {

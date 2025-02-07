@@ -7,6 +7,7 @@
         private static bool UseSecure = true;
         public static string InitDate => new DateTime().ToString("MMM dd, yyyy");
         public static string StartDate { get; set; } = InitDate;
+        public static string Avatar { get; set; } = "";
         private static string curPage;
         public static string CurPage
         {

@@ -27,7 +27,7 @@
     <div style="margin:1em">
         @if (Updated)
         {
-            <h2>Height updated!</h2>
+            <h2>@SuccessText</h2>
         }
         else
         {
@@ -43,6 +43,8 @@
 
     [Parameter]
     public EventCallback Validate { get; set; }
+    [Parameter]
+    public string SuccessText { get; set; } = "Height Updated!";
 
     protected override async Task OnInitializedAsync()
     {

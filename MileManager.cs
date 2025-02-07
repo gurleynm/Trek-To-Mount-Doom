@@ -12,6 +12,18 @@ namespace T2MD
         public static double HeightInInches { get; set; } = 35;
         public static double MilesPerStep => (HeightInInches*0.413)/(5280*12);
         public static double DistanceToMtDoom => MajorMilestones["Mount Doom"];
+        public static Dictionary<string, string> MajorImages => new Dictionary<string, string> {
+            { "Hobbitton", "https://endlessfamilytravels.com/wp-content/uploads/2023/05/Hobbiton-Houses5.jpeg" }
+            ,{ "Rivendell", "https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/03/The-Lord-of-the-Rings-Rivendell.jpg" }
+            ,{ "Lothlorien", "https://usa-forum.d5cdn.com/optimized/2X/8/8fa194e33a766e4a16e43f2db31907610b8b1fb2_2_690x379.jpeg" }
+            ,{ "Rauros", "https://qph.cf2.quoracdn.net/main-qimg-988145e34db2d173556d657cc10f20e8-lq" }
+            ,{ "Mount Doom", "https://platform.polygon.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/22280932/ROTK_eye_of_sauron.jpg?quality=90&strip=all&crop=19.044811320755,0,61.910377358491,100" }
+            ,{ "Minus Tirith", "https://images4.alphacoders.com/118/thumb-1920-118904.jpg" }
+            ,{ "Isengard", "https://cdn-images-1.medium.com/v2/resize:fit:918/1*1kCNdOayi5rTBVoYhb_7AA.jpeg" }
+            ,{ "Rivendell (2)", "https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/03/The-Lord-of-the-Rings-Rivendell.jpg" }
+            ,{ "Bag End", "https://www.pinyourfootsteps.com/wp-content/uploads/2019/12/NZNI-96-scaled.jpg" }
+            ,{ "Grey Havens", "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/04/4k-returnofking-movie-screencaps-com-34174-cropped.jpg" }
+        };
         public static Dictionary<string, double> MajorMilestones => new Dictionary<string, double> {
             { "Hobbitton", 0 }
             ,{ "Rivendell", 458 }
@@ -42,6 +54,9 @@ namespace T2MD
             ,{ "Pass the Argonath", 1288 }
             ,{ "Shelob's Lair", 1600 }
             ,{ "Sam Carries Frodo", 1775 }
+            ,{ "DESTROY THE RING", 1779 }
+            ,{ "Ride the Eagles to Safety", 1782 }
+            ,{ "Aragorn's Corination", 1850 }
             ,{ "Enter Rohan", 2003 }
             ,{ "Mountains of Moria Rise Ahead", 3254 }
             ,{ "Frodo's Farewell", 3384 }
