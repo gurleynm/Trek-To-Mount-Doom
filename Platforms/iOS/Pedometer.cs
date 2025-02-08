@@ -45,7 +45,8 @@ namespace T2MD
                 end = DateTime.SpecifyKind(end, DateTimeKind.Local);
 
             var data = await pedometer.QueryPedometerDataAsync((NSDate)start, (NSDate)end);
-            return (int)data.NumberOfSteps;
+            int numSteps = (int)data.NumberOfSteps;
+            return numSteps;
         }
 
         public void Start()
