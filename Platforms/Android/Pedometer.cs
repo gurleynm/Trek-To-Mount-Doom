@@ -55,6 +55,8 @@ namespace T2MD
             sensorManager?.RegisterListener(this, sensorManager.GetDefaultSensor(SensorType.StepCounter),
                 SensorDelay.Fastest);
             await Task.Delay(100);
+            sensorManager?.RegisterListener(this, sensorManager.GetDefaultSensor(SensorType.StepCounter),
+                SensorDelay.Normal);
             sensorManager?.UnregisterListener(this);
 
             return baselineSteps;
